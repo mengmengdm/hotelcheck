@@ -1,0 +1,89 @@
+name: Hotel availability monitor
+
+on:
+  schedule:
+    # Every 30 min. GitHub Actions cron is in UTC and may drift 5-15 min.
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      arrival:
+        description: "Arrival date (YYYY-MM-DD), override default"
+        required: false
+      departure:
+        description: "Departure date (YYYY-MM-DD), override default"
+        required: false
+
+permissions:
+  contents: write  # needed to commit state.json back
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Add or remove date ranges here. Each runs independently.
+        include:
+          - arrival: "2026-07-06"
+            departure: "2026-07-07"
+            adults: 2
+            rooms: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Check availability
+        env:
+          SERVERJIANG_SENDKEY: ${{ secrets.SERVERJIANG_SENDKEY }}
+        run: |
+          python monitor.py \
+            --arrival "${{ inputs.arrival || matrix.arrival }}" \
+            --departure "${{ inputs.departure || matrix.departure }}" \
+            --adults ${{ matrix.adults }} \
+            --rooms ${{ matrix.rooms }} \
+            --state-file state.json \
+            --notify
+
+      - name: Commit updated state
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          if git diff --cached --quiet; then
+            echo "No state changes."
+          else
+            git commit -m "chore: update availability snapshot [skip ci]"
+            # Retry-on-conflict because parallel matrix jobs may race.
+            for i in 1 2 3; do
+              git pull --rebase --autostash && git push && break
+              sleep $((RANDOM % 5 + 1))
+            done
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          SERVERJIANG_SENDKEY: ${{ secrets.SERVERJIANG_SENDKEY }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ARRIVAL: ${{ inputs.arrival || matrix.arrival }}
+          DEPARTURE: ${{ inputs.departure || matrix.departure }}
+        run: |
+          if [ -z "$SERVERJIANG_SENDKEY" ]; then
+            echo "SERVERJIANG_SENDKEY not set, skipping failure notification."
+            exit 0
+          fi
+          TITLE="⚠️ Jungfrau Lodge 监控失败 ($ARRIVAL → $DEPARTURE)"
+          DESP=$(printf '监控任务执行失败,请检查。\n\n- 日期: %s → %s\n- 失败时间: %s\n- 查看日志: [Actions Run](%s)\n\n可能原因: 网站宕机、改版、或网络问题。' \
+            "$ARRIVAL" "$DEPARTURE" "$(date -u +'%Y-%m-%d %H:%M UTC')" "$RUN_URL")
+          curl -sS -X POST "https://sctapi.ftqq.com/${SERVERJIANG_SENDKEY}.send" \
+            --data-urlencode "title=$TITLE" \
+            --data-urlencode "desp=$DESP" \
+            | head -c 500
+          echo ""
