@@ -24,7 +24,7 @@ jobs:
       matrix:
         # Add or remove date ranges here. Each runs independently.
         include:
-          - arrival: "2026-07-06"
+          - arrival: "2026-07-01"
             departure: "2026-07-07"
             adults: 2
             rooms: 1
