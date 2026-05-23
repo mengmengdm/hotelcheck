@@ -42,13 +42,19 @@ jobs:
         env:
           SERVERJIANG_SENDKEY: ${{ secrets.SERVERJIANG_SENDKEY }}
         run: |
+          # Manual dispatch always pushes a status summary (for testing).
+          # Scheduled runs only notify on diff.
+          NOTIFY_FLAG="--notify"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            NOTIFY_FLAG="--always-notify"
+          fi
           python monitor.py \
             --arrival "${{ inputs.arrival || matrix.arrival }}" \
             --departure "${{ inputs.departure || matrix.departure }}" \
             --adults ${{ matrix.adults }} \
             --rooms ${{ matrix.rooms }} \
             --state-file state.json \
-            --notify
+            $NOTIFY_FLAG
 
       - name: Commit updated state
         if: success()

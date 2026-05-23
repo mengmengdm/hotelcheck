@@ -225,6 +225,35 @@ def format_notification(arrival: str, departure: str, diff: dict) -> tuple[str, 
     return title, "\n".join(lines)
 
 
+def format_status_summary(arrival: str, departure: str, rooms: list[Room]) -> tuple[str, str]:
+    available = [r for r in rooms if r.available]
+    title = (
+        f"📋 Jungfrau Lodge 当前状态 {arrival} → {departure}: "
+        f"{len(available)}/{len(rooms)} 可用"
+    )
+    lines = [
+        f"### 日期: {arrival} → {departure}",
+        "",
+        f"**共 {len(rooms)} 个房型,{len(available)} 个可用**",
+        "",
+    ]
+    if available:
+        lines.append("## ✅ 可用房型")
+        lines.append("")
+        for r in available:
+            price = f" — **{r.price_chf:.2f} CHF/night**" if r.price_chf else ""
+            lines.append(f"- {r.name}{price}")
+    else:
+        lines.append("_当前日期段无可用房型。_")
+    lines += [
+        "",
+        f"[👉 立即预订](https://www.jungfraulodge.ch/en/booking/booking-step:room_selection1/)",
+        "",
+        f"_检查时间: {datetime.now().isoformat(timespec='seconds')}_",
+    ]
+    return title, "\n".join(lines)
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="Jungfrau Lodge availability monitor")
     p.add_argument("--arrival", required=True, help="YYYY-MM-DD")
@@ -236,6 +265,11 @@ def main() -> int:
         "--notify",
         action="store_true",
         help="Push Server酱 notification when new rooms become available",
+    )
+    p.add_argument(
+        "--always-notify",
+        action="store_true",
+        help="Push current-status summary regardless of diff (for manual testing)",
     )
     p.add_argument("--json", action="store_true", help="Output JSON instead of table")
     p.add_argument("--save-html", help="Save raw HTML to this path (for debugging)")
@@ -270,14 +304,21 @@ def main() -> int:
         diff = diff_availability(prev, rooms)
         save_state(state_path, key, snapshot)
 
-        if args.notify and (diff["newly_available"] or diff["price_drops"]):
-            send_key = os.environ.get("SERVERJIANG_SENDKEY")
-            if not send_key:
-                print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
-            else:
-                title, desp = format_notification(args.arrival, args.departure, diff)
-                if push_serverjiang(send_key, title, desp):
-                    print(f"[info] Pushed: {title}")
+    send_key = os.environ.get("SERVERJIANG_SENDKEY")
+    if args.always_notify:
+        if not send_key:
+            print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
+        else:
+            title, desp = format_status_summary(args.arrival, args.departure, rooms)
+            if push_serverjiang(send_key, title, desp):
+                print(f"[info] Pushed status summary: {title}")
+    elif args.notify and diff and (diff["newly_available"] or diff["price_drops"]):
+        if not send_key:
+            print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
+        else:
+            title, desp = format_notification(args.arrival, args.departure, diff)
+            if push_serverjiang(send_key, title, desp):
+                print(f"[info] Pushed: {title}")
 
     # Output
     if args.json:
