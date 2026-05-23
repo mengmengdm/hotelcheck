@@ -145,5 +145,221 @@
         ]
       }
     ]
+  },
+  "2026-07-01_2026-07-07_a2r1": {
+    "checked_at": "2026-05-23T15:12:41",
+    "arrival": "2026-07-01",
+    "departure": "2026-07-07",
+    "adults": 2,
+    "rooms_requested": 1,
+    "rooms": [
+      {
+        "room_id": "6",
+        "name": "Double room 'Standard'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "8",
+        "name": "Double room 'Eiger'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "9",
+        "name": "Twin 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "13",
+        "name": "Double room 'Basic'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "15",
+        "name": "Double room 'Basic+'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "7",
+        "name": "Triple room 'Standard'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "10",
+        "name": "Triple room 'Eiger'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "11",
+        "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "17",
+        "name": "Double room 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "18",
+        "name": "Double room 'Top-Floors'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "19",
+        "name": "Triple room 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05"
+        ]
+      },
+      {
+        "room_id": "23",
+        "name": "Apartment Arabelle",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01",
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      },
+      {
+        "room_id": "24",
+        "name": "Apartment Deer",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-02",
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-06"
+        ]
+      }
+    ]
   }
 }
