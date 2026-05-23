@@ -1,12 +1,20 @@
 """Jungfrau Lodge room availability monitor.
 
-Usage:
-    # Show current state for a date range
-    python monitor.py --arrival 2026-07-06 --departure 2026-07-07
+Always queries each night within the [arrival, departure) range separately.
+This shows per-night availability rather than only fully-bookable multi-night
+stays (which are often empty).
 
-    # Compare against state file, push notification on new availability
-    python monitor.py --arrival 2026-07-06 --departure 2026-07-07 \\
+Usage:
+    # Check each night between 2026-07-01 and 2026-07-07 (6 nights)
+    python monitor.py --arrival 2026-07-01 --departure 2026-07-07
+
+    # With state file + notify on changes
+    python monitor.py --arrival 2026-07-01 --departure 2026-07-07 \\
         --state-file state.json --notify
+
+    # Push current status summary regardless of changes (testing)
+    python monitor.py --arrival 2026-07-01 --departure 2026-07-07 \\
+        --state-file state.json --always-notify
 """
 
 from __future__ import annotations
@@ -16,8 +24,9 @@ import json
 import os
 import re
 import sys
+import time
 from dataclasses import dataclass, asdict
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import requests
@@ -198,26 +207,65 @@ def push_serverjiang(send_key: str, title: str, desp: str) -> bool:
         return False
 
 
-def format_notification(arrival: str, departure: str, diff: dict) -> tuple[str, str]:
-    new_rooms = diff["newly_available"]
-    title = f"🏨 Jungfrau Lodge 有新房! {arrival} → {departure}"
-    lines = [
-        f"### 日期: {arrival} → {departure}",
-        "",
-        "## ✨ 新可用房型",
-        "",
-    ]
-    for r in new_rooms:
-        price = f" — **{r.price_chf:.2f} CHF/night**" if r.price_chf else ""
-        lines.append(f"- {r.name}{price}")
+def iter_nights(arrival: str, departure: str) -> list[tuple[str, str]]:
+    """Split a [arrival, departure) range into consecutive 1-night queries.
 
-    if diff["price_drops"]:
-        lines += ["", "## 💰 降价房型", ""]
-        for r, old, new in diff["price_drops"]:
-            lines.append(f"- {r.name}: {old:.2f} → **{new:.2f} CHF/night**")
+    iter_nights("2026-07-01", "2026-07-04") ->
+        [("2026-07-01","2026-07-02"), ("2026-07-02","2026-07-03"), ("2026-07-03","2026-07-04")]
+    """
+    start = date.fromisoformat(arrival)
+    end = date.fromisoformat(departure)
+    if end <= start:
+        raise ValueError(f"departure must be after arrival, got {arrival} -> {departure}")
+    out: list[tuple[str, str]] = []
+    cur = start
+    while cur < end:
+        nxt = cur + timedelta(days=1)
+        out.append((cur.isoformat(), nxt.isoformat()))
+        cur = nxt
+    return out
+
+
+@dataclass
+class NightResult:
+    arrival: str
+    departure: str
+    rooms: list[Room]
+    diff: dict | None  # newly_available / now_unavailable / price_drops
+
+
+def has_changes(night_results: list[NightResult]) -> bool:
+    for nr in night_results:
+        if nr.diff and (nr.diff["newly_available"] or nr.diff["price_drops"]):
+            return True
+    return False
+
+
+def format_notification_nightly(
+    arrival: str, departure: str, night_results: list[NightResult]
+) -> tuple[str, str]:
+    title = f"🏨 Jungfrau Lodge 有新房! {arrival} → {departure}"
+    lines = [f"### 日期范围: {arrival} → {departure} (逐夜查询)", ""]
+
+    new_lines: list[str] = []
+    drop_lines: list[str] = []
+    for nr in night_results:
+        if not nr.diff:
+            continue
+        for r in nr.diff["newly_available"]:
+            price = f" — **{r.price_chf:.2f} CHF**" if r.price_chf else ""
+            new_lines.append(f"- {nr.arrival} → {nr.departure}: {r.name}{price}")
+        for r, old, new in nr.diff["price_drops"]:
+            drop_lines.append(
+                f"- {nr.arrival} → {nr.departure}: {r.name}: {old:.2f} → **{new:.2f} CHF**"
+            )
+
+    if new_lines:
+        lines += ["## ✨ 新可用房型(按夜)", ""] + new_lines + [""]
+    if drop_lines:
+        lines += ["## 💰 降价房型(按夜)", ""] + drop_lines + [""]
 
     lines += [
-        "",
         f"[👉 立即预订](https://www.jungfraulodge.ch/en/booking/booking-step:room_selection1/)",
         "",
         f"_检查时间: {datetime.now().isoformat(timespec='seconds')}_",
@@ -225,131 +273,185 @@ def format_notification(arrival: str, departure: str, diff: dict) -> tuple[str, 
     return title, "\n".join(lines)
 
 
-def format_status_summary(arrival: str, departure: str, rooms: list[Room]) -> tuple[str, str]:
-    available = [r for r in rooms if r.available]
+def format_status_summary_nightly(
+    arrival: str, departure: str, night_results: list[NightResult]
+) -> tuple[str, str]:
+    nights_with = sum(1 for nr in night_results if any(r.available for r in nr.rooms))
     title = (
         f"📋 Jungfrau Lodge 当前状态 {arrival} → {departure}: "
-        f"{len(available)}/{len(rooms)} 可用"
+        f"{nights_with}/{len(night_results)} 夜有房"
     )
     lines = [
-        f"### 日期: {arrival} → {departure}",
+        f"### 日期范围: {arrival} → {departure} (逐夜查询)",
         "",
-        f"**共 {len(rooms)} 个房型,{len(available)} 个可用**",
+        f"**共查询 {len(night_results)} 夜,{nights_with} 夜有可用房型**",
         "",
     ]
-    if available:
-        lines.append("## ✅ 可用房型")
-        lines.append("")
-        for r in available:
-            price = f" — **{r.price_chf:.2f} CHF/night**" if r.price_chf else ""
-            lines.append(f"- {r.name}{price}")
-    else:
-        lines.append("_当前日期段无可用房型。_")
+    for nr in night_results:
+        available = [r for r in nr.rooms if r.available]
+        if available:
+            lines.append(f"#### {nr.arrival} → {nr.departure} ({len(available)} 间可用)")
+            for r in available:
+                price = f" — **{r.price_chf:.2f} CHF**" if r.price_chf else ""
+                lines.append(f"- {r.name}{price}")
+            lines.append("")
+        else:
+            lines.append(f"#### {nr.arrival} → {nr.departure} — _无可用_")
+            lines.append("")
+
     lines += [
-        "",
         f"[👉 立即预订](https://www.jungfraulodge.ch/en/booking/booking-step:room_selection1/)",
         "",
         f"_检查时间: {datetime.now().isoformat(timespec='seconds')}_",
     ]
     return title, "\n".join(lines)
+
+
+def check_one_night(
+    arrival: str,
+    departure: str,
+    adults: int,
+    rooms_count: int,
+    state_path: Path | None,
+) -> NightResult:
+    html = fetch_html(arrival, departure, adults, rooms_count)
+    rooms = parse_rooms(html)
+    if not rooms:
+        raise RuntimeError(
+            "Parsed 0 rooms from response. The site structure may have changed "
+            f"(arrival={arrival} departure={departure}). "
+            f"Response length: {len(html)} bytes."
+        )
+
+    snapshot = {
+        "checked_at": datetime.now().isoformat(timespec="seconds"),
+        "arrival": arrival,
+        "departure": departure,
+        "adults": adults,
+        "rooms_requested": rooms_count,
+        "rooms": [asdict(r) for r in rooms],
+    }
+
+    diff = None
+    if state_path:
+        key = f"{arrival}_{departure}_a{adults}r{rooms_count}"
+        prev = load_state(state_path, key)
+        diff = diff_availability(prev, rooms)
+        save_state(state_path, key, snapshot)
+
+    return NightResult(arrival=arrival, departure=departure, rooms=rooms, diff=diff)
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(description="Jungfrau Lodge availability monitor")
-    p.add_argument("--arrival", required=True, help="YYYY-MM-DD")
-    p.add_argument("--departure", required=True, help="YYYY-MM-DD")
+    p = argparse.ArgumentParser(
+        description="Jungfrau Lodge availability monitor (queries each night separately)"
+    )
+    p.add_argument("--arrival", required=True, help="Range start, YYYY-MM-DD")
+    p.add_argument("--departure", required=True, help="Range end (exclusive), YYYY-MM-DD")
     p.add_argument("--adults", type=int, default=2)
     p.add_argument("--rooms", type=int, default=1)
     p.add_argument("--state-file", help="JSON file to read/write availability state")
     p.add_argument(
         "--notify",
         action="store_true",
-        help="Push Server酱 notification when new rooms become available",
+        help="Push Server酱 notification when new rooms become available on any night",
     )
     p.add_argument(
         "--always-notify",
         action="store_true",
         help="Push current-status summary regardless of diff (for manual testing)",
     )
+    p.add_argument(
+        "--sleep-between",
+        type=float,
+        default=1.5,
+        help="Seconds to sleep between per-night requests (be polite)",
+    )
     p.add_argument("--json", action="store_true", help="Output JSON instead of table")
-    p.add_argument("--save-html", help="Save raw HTML to this path (for debugging)")
     args = p.parse_args()
 
-    html = fetch_html(args.arrival, args.departure, args.adults, args.rooms)
-    if args.save_html:
-        Path(args.save_html).write_text(html, encoding="utf-8")
-    rooms = parse_rooms(html)
-    if not rooms:
-        raise RuntimeError(
-            "Parsed 0 rooms from response. The site structure may have changed "
-            f"(arrival={args.arrival} departure={args.departure}). "
-            f"Response length: {len(html)} bytes."
-        )
+    state_path = Path(args.state_file) if args.state_file else None
+    nights = iter_nights(args.arrival, args.departure)
 
-    snapshot = {
-        "checked_at": datetime.now().isoformat(timespec="seconds"),
-        "arrival": args.arrival,
-        "departure": args.departure,
-        "adults": args.adults,
-        "rooms_requested": args.rooms,
-        "rooms": [asdict(r) for r in rooms],
-    }
+    print(f"Checking {len(nights)} night(s): {args.arrival} -> {args.departure}")
+    night_results: list[NightResult] = []
+    for i, (a, d) in enumerate(nights):
+        if i > 0 and args.sleep_between > 0:
+            time.sleep(args.sleep_between)
+        print(f"  [{i + 1}/{len(nights)}] {a} -> {d} ...", end=" ", flush=True)
+        nr = check_one_night(a, d, args.adults, args.rooms, state_path)
+        avail = sum(1 for r in nr.rooms if r.available)
+        print(f"{avail}/{len(nr.rooms)} available")
+        night_results.append(nr)
 
-    # Diff + notify
-    diff = None
-    if args.state_file:
-        state_path = Path(args.state_file)
-        key = f"{args.arrival}_{args.departure}_a{args.adults}r{args.rooms}"
-        prev = load_state(state_path, key)
-        diff = diff_availability(prev, rooms)
-        save_state(state_path, key, snapshot)
-
+    # Notification
     send_key = os.environ.get("SERVERJIANG_SENDKEY")
     if args.always_notify:
         if not send_key:
             print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
         else:
-            title, desp = format_status_summary(args.arrival, args.departure, rooms)
+            title, desp = format_status_summary_nightly(
+                args.arrival, args.departure, night_results
+            )
             if push_serverjiang(send_key, title, desp):
                 print(f"[info] Pushed status summary: {title}")
-    elif args.notify and diff and (diff["newly_available"] or diff["price_drops"]):
+    elif args.notify and has_changes(night_results):
         if not send_key:
             print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
         else:
-            title, desp = format_notification(args.arrival, args.departure, diff)
+            title, desp = format_notification_nightly(
+                args.arrival, args.departure, night_results
+            )
             if push_serverjiang(send_key, title, desp):
                 print(f"[info] Pushed: {title}")
 
     # Output
     if args.json:
-        out = dict(snapshot)
-        if diff is not None:
-            out["diff"] = {
-                "newly_available": [asdict(r) for r in diff["newly_available"]],
-                "now_unavailable": diff["now_unavailable"],
-                "price_drops": [
-                    {"room": asdict(r), "old": old, "new": new}
-                    for r, old, new in diff["price_drops"]
-                ],
-            }
+        out = {
+            "arrival": args.arrival,
+            "departure": args.departure,
+            "adults": args.adults,
+            "rooms_requested": args.rooms,
+            "checked_at": datetime.now().isoformat(timespec="seconds"),
+            "nights": [
+                {
+                    "arrival": nr.arrival,
+                    "departure": nr.departure,
+                    "rooms": [asdict(r) for r in nr.rooms],
+                    "diff": (
+                        {
+                            "newly_available": [
+                                asdict(r) for r in nr.diff["newly_available"]
+                            ],
+                            "now_unavailable": nr.diff["now_unavailable"],
+                            "price_drops": [
+                                {"room": asdict(r), "old": old, "new": new}
+                                for r, old, new in nr.diff["price_drops"]
+                            ],
+                        }
+                        if nr.diff
+                        else None
+                    ),
+                }
+                for nr in night_results
+            ],
+        }
         print(json.dumps(out, ensure_ascii=False, indent=2))
         return 0
 
-    available = [r for r in rooms if r.available]
-    print(f"Checked {args.arrival} -> {args.departure} for {args.adults} adult(s)")
-    print(f"Total rooms listed: {len(rooms)} | Available: {len(available)}")
+    # Table output
     print("-" * 70)
-    for r in rooms:
-        flag = "[OK] " if r.available else "[--] "
-        price = f"  {r.price_chf:.2f} CHF/night" if r.price_chf else ""
-        print(f"{flag}{r.name:<40s}{price}")
-    if diff:
-        if diff["newly_available"]:
-            print(f"\n>>> NEW available: {[r.name for r in diff['newly_available']]}")
-        if diff["price_drops"]:
-            print(f">>> Price drops: {[(r.name, old, new) for r, old, new in diff['price_drops']]}")
-        if diff["now_unavailable"]:
-            print(f">>> Gone: {diff['now_unavailable']}")
+    for nr in night_results:
+        avail = [r for r in nr.rooms if r.available]
+        flag = "[OK]" if avail else "[--]"
+        names = ", ".join(
+            f"{r.name}({r.price_chf:.0f})" if r.price_chf else r.name for r in avail
+        )
+        print(f"{flag} {nr.arrival} -> {nr.departure}: {names or '(none)'}")
+        if nr.diff and nr.diff["newly_available"]:
+            print(f"     >>> NEW: {[r.name for r in nr.diff['newly_available']]}")
+        if nr.diff and nr.diff["price_drops"]:
+            print(f"     >>> DROP: {[(r.name, old, new) for r, old, new in nr.diff['price_drops']]}")
     return 0
 
 
