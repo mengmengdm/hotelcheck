@@ -1,6 +1,6 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-05-24T17:53:38",
+    "checked_at": "2026-05-24T19:03:33",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -147,7 +147,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-05-24T17:53:41",
+    "checked_at": "2026-05-24T19:03:36",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -296,7 +296,7 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-05-24T17:53:45",
+    "checked_at": "2026-05-24T19:03:40",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -445,12 +445,20 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-05-24T17:53:48",
+    "checked_at": "2026-05-24T19:03:44",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
+      {
+        "room_id": "13",
+        "name": "Double room 'Basic'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": true,
+        "price_chf": 99.0,
+        "closed_dates": []
+      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -474,16 +482,6 @@
       {
         "room_id": "9",
         "name": "Twin 'Eiger & Balcony'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-04"
-        ]
-      },
-      {
-        "room_id": "13",
-        "name": "Double room 'Basic'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -594,12 +592,20 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-05-24T17:53:52",
+    "checked_at": "2026-05-24T19:03:48",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
+      {
+        "room_id": "13",
+        "name": "Double room 'Basic'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": true,
+        "price_chf": 99.0,
+        "closed_dates": []
+      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -623,16 +629,6 @@
       {
         "room_id": "9",
         "name": "Twin 'Eiger & Balcony'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-05"
-        ]
-      },
-      {
-        "room_id": "13",
-        "name": "Double room 'Basic'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -743,7 +739,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-05-24T17:53:55",
+    "checked_at": "2026-05-24T19:03:51",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
