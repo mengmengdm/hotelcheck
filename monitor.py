@@ -23,10 +23,13 @@ import argparse
 import json
 import os
 import re
+import smtplib
 import sys
 import time
 from dataclasses import dataclass, asdict
 from datetime import date, datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 
 import requests
@@ -207,6 +210,81 @@ def push_serverjiang(send_key: str, title: str, desp: str) -> bool:
         return False
 
 
+def _md_to_html(md: str) -> str:
+    """Minimal markdown -> HTML, just for email rendering."""
+    lines = md.split("\n")
+    out = []
+    for line in lines:
+        if line.startswith("### "):
+            out.append(f"<h3>{line[4:]}</h3>")
+        elif line.startswith("## "):
+            out.append(f"<h2>{line[3:]}</h2>")
+        elif line.startswith("#### "):
+            out.append(f"<h4>{line[5:]}</h4>")
+        elif line.startswith("- "):
+            out.append(f"<li>{line[2:]}</li>")
+        elif line.strip() == "":
+            out.append("<br>")
+        else:
+            out.append(f"<p>{line}</p>")
+    html = "\n".join(out)
+    html = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html)
+    html = re.sub(r"_(.+?)_", r"<em>\1</em>", html)
+    html = re.sub(r"\[(.+?)\]\((.+?)\)", r'<a href="\2">\1</a>', html)
+    return f"<html><body>{html}</body></html>"
+
+
+def push_email(
+    smtp_user: str,
+    smtp_password: str,
+    recipients: list[str],
+    subject: str,
+    body_md: str,
+    smtp_host: str = "smtp.gmail.com",
+    smtp_port: int = 465,
+) -> bool:
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = smtp_user
+    msg["To"] = ", ".join(recipients)
+    msg.attach(MIMEText(body_md, "plain", "utf-8"))
+    msg.attach(MIMEText(_md_to_html(body_md), "html", "utf-8"))
+    try:
+        with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=20) as s:
+            s.login(smtp_user, smtp_password)
+            s.sendmail(smtp_user, recipients, msg.as_string())
+        return True
+    except Exception as e:
+        print(f"[warn] Email push failed: {e}", file=sys.stderr)
+        return False
+
+
+def push_all(title: str, desp: str) -> list[str]:
+    """Push to all configured channels. Returns list of channels that succeeded."""
+    succeeded: list[str] = []
+
+    send_key = os.environ.get("SERVERJIANG_SENDKEY")
+    if send_key:
+        if push_serverjiang(send_key, title, desp):
+            succeeded.append("serverjiang")
+
+    gmail_user = os.environ.get("GMAIL_USER")
+    gmail_pw = os.environ.get("GMAIL_APP_PASSWORD")
+    gmail_to_raw = os.environ.get("GMAIL_TO") or gmail_user
+    if gmail_user and gmail_pw and gmail_to_raw:
+        recipients = [x.strip() for x in gmail_to_raw.split(",") if x.strip()]
+        if push_email(gmail_user, gmail_pw, recipients, title, desp):
+            succeeded.append("email")
+
+    if not send_key and not (gmail_user and gmail_pw):
+        print(
+            "[warn] No notification channel configured "
+            "(set SERVERJIANG_SENDKEY and/or GMAIL_USER+GMAIL_APP_PASSWORD)",
+            file=sys.stderr,
+        )
+    return succeeded
+
+
 def iter_nights(arrival: str, departure: str) -> list[tuple[str, str]]:
     """Split a [arrival, departure) range into consecutive 1-night queries.
 
@@ -385,25 +463,20 @@ def main() -> int:
         night_results.append(nr)
 
     # Notification
-    send_key = os.environ.get("SERVERJIANG_SENDKEY")
     if args.always_notify:
-        if not send_key:
-            print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
-        else:
-            title, desp = format_status_summary_nightly(
-                args.arrival, args.departure, night_results
-            )
-            if push_serverjiang(send_key, title, desp):
-                print(f"[info] Pushed status summary: {title}")
+        title, desp = format_status_summary_nightly(
+            args.arrival, args.departure, night_results
+        )
+        channels = push_all(title, desp)
+        if channels:
+            print(f"[info] Pushed status summary via {channels}: {title}")
     elif args.notify and has_changes(night_results):
-        if not send_key:
-            print("[warn] SERVERJIANG_SENDKEY env var not set; skip push", file=sys.stderr)
-        else:
-            title, desp = format_notification_nightly(
-                args.arrival, args.departure, night_results
-            )
-            if push_serverjiang(send_key, title, desp):
-                print(f"[info] Pushed: {title}")
+        title, desp = format_notification_nightly(
+            args.arrival, args.departure, night_results
+        )
+        channels = push_all(title, desp)
+        if channels:
+            print(f"[info] Pushed via {channels}: {title}")
 
     # Output
     if args.json:

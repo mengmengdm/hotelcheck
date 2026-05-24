@@ -41,6 +41,9 @@ jobs:
       - name: Check availability
         env:
           SERVERJIANG_SENDKEY: ${{ secrets.SERVERJIANG_SENDKEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_TO: ${{ secrets.GMAIL_TO }}
         run: |
           # Manual dispatch always pushes a status summary (for testing).
           # Scheduled runs only notify on diff.
@@ -77,19 +80,24 @@ jobs:
         if: failure()
         env:
           SERVERJIANG_SENDKEY: ${{ secrets.SERVERJIANG_SENDKEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_TO: ${{ secrets.GMAIL_TO }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           ARRIVAL: ${{ inputs.arrival || matrix.arrival }}
           DEPARTURE: ${{ inputs.departure || matrix.departure }}
         run: |
-          if [ -z "$SERVERJIANG_SENDKEY" ]; then
-            echo "SERVERJIANG_SENDKEY not set, skipping failure notification."
-            exit 0
-          fi
-          TITLE="⚠️ Jungfrau Lodge 监控失败 ($ARRIVAL → $DEPARTURE)"
-          DESP=$(printf '监控任务执行失败,请检查。\n\n- 日期: %s → %s\n- 失败时间: %s\n- 查看日志: [Actions Run](%s)\n\n可能原因: 网站宕机、改版、或网络问题。' \
-            "$ARRIVAL" "$DEPARTURE" "$(date -u +'%Y-%m-%d %H:%M UTC')" "$RUN_URL")
-          curl -sS -X POST "https://sctapi.ftqq.com/${SERVERJIANG_SENDKEY}.send" \
-            --data-urlencode "title=$TITLE" \
-            --data-urlencode "desp=$DESP" \
-            | head -c 500
-          echo ""
+          python - <<'PY'
+          import os, sys
+          sys.path.insert(0, ".")
+          from monitor import push_all
+          title = f"⚠️ Jungfrau Lodge 监控失败 ({os.environ['ARRIVAL']} → {os.environ['DEPARTURE']})"
+          desp = (
+              f"监控任务执行失败,请检查。\n\n"
+              f"- 日期: {os.environ['ARRIVAL']} → {os.environ['DEPARTURE']}\n"
+              f"- 查看日志: [Actions Run]({os.environ['RUN_URL']})\n\n"
+              "可能原因: 网站宕机、改版、或网络问题。"
+          )
+          channels = push_all(title, desp)
+          print(f"Pushed failure to: {channels or '(none)'}")
+          PY
