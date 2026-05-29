@@ -1,28 +1,18 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-05-29T10:39:16",
+    "checked_at": "2026-05-29T13:53:45",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
       {
-        "room_id": "13",
-        "name": "Double room 'Basic'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 99.0,
-        "closed_dates": []
-      },
-      {
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-01"
-        ]
+        "available": true,
+        "price_chf": 171.0,
+        "closed_dates": []
       },
       {
         "room_id": "8",
@@ -37,6 +27,16 @@
       {
         "room_id": "9",
         "name": "Twin 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01"
+        ]
+      },
+      {
+        "room_id": "13",
+        "name": "Double room 'Basic'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -120,7 +120,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-01"
+        ]
       },
       {
         "room_id": "23",
@@ -143,7 +145,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-05-29T10:39:19",
+    "checked_at": "2026-05-29T13:53:48",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -292,7 +294,7 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-05-29T10:39:23",
+    "checked_at": "2026-05-29T13:53:52",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -439,7 +441,7 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-05-29T10:39:26",
+    "checked_at": "2026-05-29T13:53:55",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -588,7 +590,7 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-05-29T10:39:29",
+    "checked_at": "2026-05-29T13:53:59",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -737,7 +739,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-05-29T10:39:33",
+    "checked_at": "2026-05-29T13:54:02",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
