@@ -1,6 +1,6 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-06T07:41:17",
+    "checked_at": "2026-06-06T09:55:04",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -147,7 +147,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-06T07:41:20",
+    "checked_at": "2026-06-06T09:55:08",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -296,25 +296,23 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-06T07:41:24",
+    "checked_at": "2026-06-06T09:55:12",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
       {
-        "room_id": "6",
-        "name": "Double room 'Standard'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-03"
-        ]
-      },
-      {
         "room_id": "8",
         "name": "Double room 'Eiger'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": true,
+        "price_chf": 198.0,
+        "closed_dates": []
+      },
+      {
+        "room_id": "6",
+        "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -445,7 +443,7 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-06T07:41:27",
+    "checked_at": "2026-06-06T09:55:16",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -594,7 +592,7 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-06T07:41:30",
+    "checked_at": "2026-06-06T09:55:20",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -743,7 +741,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-06T07:41:34",
+    "checked_at": "2026-06-06T09:55:24",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
