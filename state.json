@@ -1,6 +1,6 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-14T01:40:48",
+    "checked_at": "2026-06-14T06:26:28",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -110,7 +110,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-01"
+        ]
       },
       {
         "room_id": "19",
@@ -143,7 +145,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-14T01:40:52",
+    "checked_at": "2026-06-14T06:26:32",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -286,7 +288,7 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-14T01:40:56",
+    "checked_at": "2026-06-14T06:26:35",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -433,7 +435,7 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-14T01:41:00",
+    "checked_at": "2026-06-14T06:26:39",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -582,7 +584,7 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-14T01:41:04",
+    "checked_at": "2026-06-14T06:26:43",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -731,7 +733,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-14T01:41:08",
+    "checked_at": "2026-06-14T06:26:46",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
@@ -789,7 +791,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-06"
+        ]
       },
       {
         "room_id": "10",
