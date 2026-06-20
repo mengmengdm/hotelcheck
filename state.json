@@ -1,6 +1,6 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-20T14:38:11",
+    "checked_at": "2026-06-20T16:11:38",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -72,7 +72,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-01"
+        ]
       },
       {
         "room_id": "11",
@@ -147,7 +149,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-20T14:38:15",
+    "checked_at": "2026-06-20T16:11:42",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -288,7 +290,7 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-20T14:38:19",
+    "checked_at": "2026-06-20T16:11:45",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -437,7 +439,7 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-20T14:38:23",
+    "checked_at": "2026-06-20T16:11:49",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -499,7 +501,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-04"
+        ]
       },
       {
         "room_id": "10",
@@ -584,7 +588,7 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-20T14:38:27",
+    "checked_at": "2026-06-20T16:11:52",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -646,7 +650,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-05"
+        ]
       },
       {
         "room_id": "10",
@@ -731,7 +737,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-20T14:38:31",
+    "checked_at": "2026-06-20T16:11:56",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
