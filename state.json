@@ -1,6 +1,6 @@
 {
   "2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-20T16:11:38",
+    "checked_at": "2026-06-20T17:52:20",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -149,7 +149,7 @@
     ]
   },
   "2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-20T16:11:42",
+    "checked_at": "2026-06-20T17:52:24",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -169,14 +169,6 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": true,
         "price_chf": 216.0,
-        "closed_dates": []
-      },
-      {
-        "room_id": "10",
-        "name": "Triple room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 207.0,
         "closed_dates": []
       },
       {
@@ -220,6 +212,16 @@
       {
         "room_id": "7",
         "name": "Triple room 'Standard'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-02"
+        ]
+      },
+      {
+        "room_id": "10",
+        "name": "Triple room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -290,7 +292,7 @@
     ]
   },
   "2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-20T16:11:45",
+    "checked_at": "2026-06-20T17:52:27",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -439,7 +441,7 @@
     ]
   },
   "2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-20T16:11:49",
+    "checked_at": "2026-06-20T17:52:31",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -588,7 +590,7 @@
     ]
   },
   "2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-20T16:11:52",
+    "checked_at": "2026-06-20T17:52:35",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -737,7 +739,7 @@
     ]
   },
   "2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-20T16:11:56",
+    "checked_at": "2026-06-20T17:52:39",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
