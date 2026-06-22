@@ -26,13 +26,14 @@ import re
 import smtplib
 import sys
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from datetime import date, datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
 
 import requests
+import yaml
 from bs4 import BeautifulSoup
 
 BOOKING_URL = "https://www.jungfraulodge.ch/en/booking/"
@@ -51,6 +52,60 @@ class Room:
     available: bool
     price_chf: float | None
     closed_dates: list[str]
+
+
+@dataclass
+class Subscriber:
+    id: str
+    email: str
+    arrival: str
+    departure: str
+    adults: int = 2
+    rooms: int = 1
+    rooms_filter: list[str] = field(default_factory=list)  # match by name keyword, case-insensitive
+    unsubscribe_token: str = ""
+    created_at: str = ""
+
+
+def load_subscribers(path: Path) -> list[Subscriber]:
+    if not path.exists():
+        return []
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    out: list[Subscriber] = []
+    for raw in data.get("subscribers", []):
+        # Tolerate extra fields and missing optional ones.
+        out.append(Subscriber(
+            id=str(raw["id"]),
+            email=str(raw["email"]),
+            arrival=str(raw["arrival"]),
+            departure=str(raw["departure"]),
+            adults=int(raw.get("adults", 2)),
+            rooms=int(raw.get("rooms", 1)),
+            rooms_filter=list(raw.get("rooms_filter") or []),
+            unsubscribe_token=str(raw.get("unsubscribe_token", "")),
+            created_at=str(raw.get("created_at", "")),
+        ))
+    return out
+
+
+def matches_room_filter(room: Room, rooms_filter: list[str]) -> bool:
+    if not rooms_filter:
+        return True
+    name = room.name.lower()
+    return any(kw.lower() in name for kw in rooms_filter)
+
+
+def filter_diff_by_rooms(diff: dict, rooms_filter: list[str]) -> dict:
+    if not rooms_filter:
+        return diff
+    return {
+        "newly_available": [r for r in diff["newly_available"] if matches_room_filter(r, rooms_filter)],
+        "now_unavailable": list(diff["now_unavailable"]),  # name-only; can't filter precisely without room obj
+        "price_drops": [
+            (r, old, new) for r, old, new in diff["price_drops"]
+            if matches_room_filter(r, rooms_filter)
+        ],
+    }
 
 
 def fetch_html(arrival: str, departure: str, adults: int, rooms: int) -> str:
@@ -385,54 +440,152 @@ def format_status_summary_nightly(
     return title, "\n".join(lines)
 
 
-def check_one_night(
+class HttpCache:
+    """Cache parsed Room lists by (arrival, departure, adults, rooms) within one run.
+
+    Multiple subscribers often request the same (date, adults, rooms) combination;
+    we only need to hit the website once per combo.
+    """
+
+    def __init__(self, sleep_between: float = 1.5) -> None:
+        self._cache: dict[tuple[str, str, int, int], list[Room]] = {}
+        self._sleep_between = sleep_between
+        self._fetch_count = 0
+
+    def get(self, arrival: str, departure: str, adults: int, rooms: int) -> list[Room]:
+        key = (arrival, departure, adults, rooms)
+        if key in self._cache:
+            return self._cache[key]
+        if self._fetch_count > 0 and self._sleep_between > 0:
+            time.sleep(self._sleep_between)
+        self._fetch_count += 1
+        html = fetch_html(arrival, departure, adults, rooms)
+        parsed = parse_rooms(html)
+        if not parsed:
+            raise RuntimeError(
+                "Parsed 0 rooms from response. The site structure may have changed "
+                f"(arrival={arrival} departure={departure}). "
+                f"Response length: {len(html)} bytes."
+            )
+        self._cache[key] = parsed
+        return parsed
+
+
+def run_nights_for(
     arrival: str,
     departure: str,
     adults: int,
     rooms_count: int,
     state_path: Path | None,
-) -> NightResult:
-    html = fetch_html(arrival, departure, adults, rooms_count)
-    rooms = parse_rooms(html)
-    if not rooms:
-        raise RuntimeError(
-            "Parsed 0 rooms from response. The site structure may have changed "
-            f"(arrival={arrival} departure={departure}). "
-            f"Response length: {len(html)} bytes."
+    state_key_prefix: str,
+    cache: HttpCache,
+    rooms_filter: list[str] | None = None,
+) -> list[NightResult]:
+    """Iterate every night in [arrival, departure), fetch via cache, diff against state.
+
+    state_key_prefix lets us scope state per subscriber (or use "" for global single mode).
+    """
+    nights = iter_nights(arrival, departure)
+    results: list[NightResult] = []
+    for a, d in nights:
+        rooms = cache.get(a, d, adults, rooms_count)
+
+        snapshot = {
+            "checked_at": datetime.now().isoformat(timespec="seconds"),
+            "arrival": a,
+            "departure": d,
+            "adults": adults,
+            "rooms_requested": rooms_count,
+            "rooms": [asdict(r) for r in rooms],
+        }
+
+        diff = None
+        if state_path:
+            key = f"{state_key_prefix}{a}_{d}_a{adults}r{rooms_count}"
+            prev = load_state(state_path, key)
+            diff = diff_availability(prev, rooms)
+            save_state(state_path, key, snapshot)
+            if rooms_filter:
+                diff = filter_diff_by_rooms(diff, rooms_filter)
+
+        # Filter rooms for display/format too
+        visible_rooms = (
+            [r for r in rooms if matches_room_filter(r, rooms_filter or [])]
+            if rooms_filter
+            else rooms
         )
+        results.append(NightResult(arrival=a, departure=d, rooms=visible_rooms, diff=diff))
+    return results
 
-    snapshot = {
-        "checked_at": datetime.now().isoformat(timespec="seconds"),
-        "arrival": arrival,
-        "departure": departure,
-        "adults": adults,
-        "rooms_requested": rooms_count,
-        "rooms": [asdict(r) for r in rooms],
-    }
 
-    diff = None
-    if state_path:
-        key = f"{arrival}_{departure}_a{adults}r{rooms_count}"
-        prev = load_state(state_path, key)
-        diff = diff_availability(prev, rooms)
-        save_state(state_path, key, snapshot)
+def run_subscriptions_mode(args, subscribers: list[Subscriber], state_path: Path | None) -> int:
+    if not subscribers:
+        print("[info] No subscribers in subscriptions file.")
+        return 0
 
-    return NightResult(arrival=arrival, departure=departure, rooms=rooms, diff=diff)
+    gmail_user = os.environ.get("GMAIL_USER")
+    gmail_pw = os.environ.get("GMAIL_APP_PASSWORD")
+    cache = HttpCache(sleep_between=args.sleep_between)
+
+    print(f"Running for {len(subscribers)} subscriber(s)")
+    for sub in subscribers:
+        print(f"\n=== {sub.id} <{sub.email}> {sub.arrival} -> {sub.departure} ===")
+        try:
+            night_results = run_nights_for(
+                arrival=sub.arrival,
+                departure=sub.departure,
+                adults=sub.adults,
+                rooms_count=sub.rooms,
+                state_path=state_path,
+                state_key_prefix=f"sub:{sub.id}:",
+                cache=cache,
+                rooms_filter=sub.rooms_filter,
+            )
+        except Exception as e:
+            print(f"  [error] {e}", file=sys.stderr)
+            # One subscriber failing shouldn't break others.
+            continue
+
+        for nr in night_results:
+            avail = sum(1 for r in nr.rooms if r.available)
+            print(f"  {nr.arrival} -> {nr.departure}: {avail} matching available")
+
+        if not (gmail_user and gmail_pw):
+            print("  [warn] GMAIL_USER/GMAIL_APP_PASSWORD not set; skip email")
+            continue
+
+        if args.always_notify:
+            title, desp = format_status_summary_nightly(sub.arrival, sub.departure, night_results)
+        elif args.notify and has_changes(night_results):
+            title, desp = format_notification_nightly(sub.arrival, sub.departure, night_results)
+        else:
+            continue
+
+        if sub.unsubscribe_token:
+            desp += f"\n\n_退订: 在邮件回复 'unsubscribe {sub.unsubscribe_token}' (待实现)_"
+
+        if push_email(gmail_user, gmail_pw, [sub.email], title, desp):
+            print(f"  [info] Pushed to {sub.email}")
+    return 0
 
 
 def main() -> int:
     p = argparse.ArgumentParser(
         description="Jungfrau Lodge availability monitor (queries each night separately)"
     )
-    p.add_argument("--arrival", required=True, help="Range start, YYYY-MM-DD")
-    p.add_argument("--departure", required=True, help="Range end (exclusive), YYYY-MM-DD")
+    p.add_argument("--arrival", help="Range start, YYYY-MM-DD (single mode)")
+    p.add_argument("--departure", help="Range end (exclusive), YYYY-MM-DD (single mode)")
     p.add_argument("--adults", type=int, default=2)
     p.add_argument("--rooms", type=int, default=1)
+    p.add_argument(
+        "--subscriptions-file",
+        help="YAML file listing subscribers; if set, --arrival/--departure are ignored",
+    )
     p.add_argument("--state-file", help="JSON file to read/write availability state")
     p.add_argument(
         "--notify",
         action="store_true",
-        help="Push Server酱 notification when new rooms become available on any night",
+        help="Push notification when new rooms become available on any night",
     )
     p.add_argument(
         "--always-notify",
@@ -443,26 +596,36 @@ def main() -> int:
         "--sleep-between",
         type=float,
         default=1.5,
-        help="Seconds to sleep between per-night requests (be polite)",
+        help="Seconds to sleep between distinct HTTP fetches (be polite)",
     )
     p.add_argument("--json", action="store_true", help="Output JSON instead of table")
     args = p.parse_args()
 
     state_path = Path(args.state_file) if args.state_file else None
-    nights = iter_nights(args.arrival, args.departure)
 
-    print(f"Checking {len(nights)} night(s): {args.arrival} -> {args.departure}")
-    night_results: list[NightResult] = []
-    for i, (a, d) in enumerate(nights):
-        if i > 0 and args.sleep_between > 0:
-            time.sleep(args.sleep_between)
-        print(f"  [{i + 1}/{len(nights)}] {a} -> {d} ...", end=" ", flush=True)
-        nr = check_one_night(a, d, args.adults, args.rooms, state_path)
-        avail = sum(1 for r in nr.rooms if r.available)
-        print(f"{avail}/{len(nr.rooms)} available")
-        night_results.append(nr)
+    # Subscriptions mode: ignore --arrival/--departure, iterate per subscriber.
+    if args.subscriptions_file:
+        subscribers = load_subscribers(Path(args.subscriptions_file))
+        return run_subscriptions_mode(args, subscribers, state_path)
 
-    # Notification
+    # Single mode (legacy / admin testing): requires --arrival and --departure.
+    if not args.arrival or not args.departure:
+        p.error("--arrival and --departure are required when --subscriptions-file is not given")
+
+    cache = HttpCache(sleep_between=args.sleep_between)
+    print(f"Checking {len(iter_nights(args.arrival, args.departure))} night(s): "
+          f"{args.arrival} -> {args.departure}")
+    night_results = run_nights_for(
+        arrival=args.arrival,
+        departure=args.departure,
+        adults=args.adults,
+        rooms_count=args.rooms,
+        state_path=state_path,
+        state_key_prefix="",
+        cache=cache,
+    )
+
+    # Notification (single mode pushes to all admin channels)
     if args.always_notify:
         title, desp = format_status_summary_nightly(
             args.arrival, args.departure, night_results
