@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jungfrau Lodge 订房监控 · 订阅</title>
+<style>
+  :root {
+    --fg: #1c2939;
+    --muted: #6b7a8f;
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --accent: #1d4ed8;
+    --accent-fg: #ffffff;
+    --border: #d8dee9;
+    --error: #b91c1c;
+    --ok: #15803d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+      "Microsoft YaHei", sans-serif;
+    color: var(--fg);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.55) 60%, rgba(246,248,251,1) 100%),
+      url("https://www.jungfraulodge.ch/resources/hotel/background-sommer-2024.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  header { text-align: center; margin-bottom: 28px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 14px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 22px;
+    box-shadow: 0 8px 24px rgba(28,41,57,.08);
+  }
+  label { display: block; font-weight: 600; font-size: 13px; margin: 14px 0 6px; }
+  input[type="email"],
+  input[type="date"],
+  input[type="number"],
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--fg);
+    font-family: inherit;
+  }
+  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,78,216,.18); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .checks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 16px;
+    margin-top: 6px;
+  }
+  .checks label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  button:hover:not(:disabled) { background: #1640a8; }
+  #msg { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; }
+  #msg.ok { background: #ecfdf5; color: var(--ok); display: block; }
+  #msg.err { background: #fef2f2; color: var(--error); display: block; }
+  #msg.info { background: #eff6ff; color: var(--accent); display: block; }
+  footer { text-align: center; margin-top: 32px; font-size: 12px; color: var(--muted); }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🏨 Jungfrau Lodge 订房监控</h1>
+    <div class="sub">
+      填写下方表单,有空房会自动发邮件提醒。瑞士格林德瓦的小镇酒店,夏季订满概率高。
+    </div>
+  </header>
+
+  <form id="subscribe" class="card" novalidate>
+    <label for="email">邮箱 *</label>
+    <input id="email" name="email" type="email" required placeholder="you@example.com" />
+
+    <div class="row">
+      <div>
+        <label for="arrival">到达日期 *</label>
+        <input id="arrival" name="arrival" type="date" required />
+      </div>
+      <div>
+        <label for="departure">离开日期 *</label>
+        <input id="departure" name="departure" type="date" required />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="adults">成人数</label>
+        <input id="adults" name="adults" type="number" min="1" max="8" value="2" />
+      </div>
+      <div>
+        <label for="rooms">房间数</label>
+        <input id="rooms" name="rooms" type="number" min="1" max="3" value="1" />
+      </div>
+    </div>
+
+    <label>心仪房型 (可多选,不选 = 任意房型都通知)</label>
+    <div class="checks">
+      <label><input type="checkbox" name="filter" value="Single" /> 单人房</label>
+      <label><input type="checkbox" name="filter" value="Double" /> 双人房</label>
+      <label><input type="checkbox" name="filter" value="Twin" /> Twin (双床)</label>
+      <label><input type="checkbox" name="filter" value="Triple" /> 三人房</label>
+      <label><input type="checkbox" name="filter" value="Family" /> 家庭房</label>
+      <label><input type="checkbox" name="filter" value="Apartment" /> 公寓</label>
+      <label><input type="checkbox" name="filter" value="Eiger" /> 含 Eiger (景观)</label>
+      <label><input type="checkbox" name="filter" value="Balcony" /> 含阳台</label>
+    </div>
+    <div class="hint">关键字匹配房型名称,任一命中即视为符合(不区分大小写)。</div>
+
+    <button id="submit" type="submit">📬 订阅</button>
+
+    <div id="msg"></div>
+  </form>
+
+  <footer>
+    每 30 分钟检查一次 · 数据来自
+    <a href="https://www.jungfraulodge.ch/" target="_blank" rel="noopener">jungfraulodge.ch</a>
+    · 源码
+    <a href="https://github.com/mengmengdm/hotelcheck" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+</div>
+
+<script>
+  // Cloudflare Worker endpoint that creates a PR on the GitHub repo.
+  // Filled in during Phase 3. Leave empty to keep the form in "preview" mode.
+  const WORKER_URL = "";
+
+  const form = document.getElementById("subscribe");
+  const msg = document.getElementById("msg");
+  const submitBtn = document.getElementById("submit");
+
+  // Default the arrival date to today + 30 days for nicer UX.
+  (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    const iso = d.toISOString().slice(0, 10);
+    document.getElementById("arrival").value = iso;
+    const d2 = new Date(d.getTime());
+    d2.setDate(d2.getDate() + 3);
+    document.getElementById("departure").value = d2.toISOString().slice(0, 10);
+  })();
+
+  function showMsg(kind, text) {
+    msg.className = kind;
+    msg.textContent = text;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.className = "";
+    msg.textContent = "";
+
+    const fd = new FormData(form);
+    const filters = fd.getAll("filter");
+    const payload = {
+      email: fd.get("email").trim(),
+      arrival: fd.get("arrival"),
+      departure: fd.get("departure"),
+      adults: parseInt(fd.get("adults"), 10) || 2,
+      rooms: parseInt(fd.get("rooms"), 10) || 1,
+      rooms_filter: filters,
+    };
+
+    // Client-side validation
+    if (!payload.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(payload.email)) {
+      showMsg("err", "邮箱格式不对");
+      return;
+    }
+    if (!payload.arrival || !payload.departure) {
+      showMsg("err", "请填写到达和离开日期");
+      return;
+    }
+    if (payload.departure <= payload.arrival) {
+      showMsg("err", "离开日期必须晚于到达日期");
+      return;
+    }
+
+    if (!WORKER_URL) {
+      // Phase 2 preview: just show the payload, no real submission yet.
+      showMsg(
+        "info",
+        "✅ 表单数据已收集(预览模式)。\n" +
+          "Phase 3 部署 Cloudflare Worker 后会自动提交到 GitHub 审批。\n\n" +
+          "Payload:\n" +
+          JSON.stringify(payload, null, 2),
+      );
+      msg.style.whiteSpace = "pre-wrap";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "提交中...";
+    try {
+      const r = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) {
+        const text = await r.text();
+        throw new Error(text || `HTTP ${r.status}`);
+      }
+      const data = await r.json();
+      showMsg(
+        "ok",
+        `✅ 订阅请求已提交,等待管理员批准。\n${
+          data.pr_url ? "Pull Request: " + data.pr_url : ""
+        }`,
+      );
+      form.reset();
+    } catch (err) {
+      showMsg("err", "提交失败: " + err.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "📬 订阅";
+    }
+  });
+</script>
+</body>
+</html>

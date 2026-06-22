@@ -1,5 +1,8 @@
 __pycache__/
 *.pyc
-*.html
 .venv/
 .env
+sample.html
+debug.html
+# docs/ HTML must remain tracked (GitHub Pages)
+!docs/*.html
