@@ -1,6 +1,6 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-23T13:37:08",
+    "checked_at": "2026-06-23T16:21:25",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -147,7 +147,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-23T13:37:11",
+    "checked_at": "2026-06-23T16:21:29",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -292,7 +292,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-23T13:37:15",
+    "checked_at": "2026-06-23T16:21:33",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -414,7 +414,9 @@
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
-        "closed_dates": []
+        "closed_dates": [
+          "2026-07-03"
+        ]
       },
       {
         "room_id": "23",
@@ -439,7 +441,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-23T13:37:18",
+    "checked_at": "2026-06-23T16:21:36",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -588,7 +590,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-23T13:37:22",
+    "checked_at": "2026-06-23T16:21:40",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -735,12 +737,20 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-23T13:37:25",
+    "checked_at": "2026-06-23T16:21:44",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
+      {
+        "room_id": "19",
+        "name": "Triple room 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": true,
+        "price_chf": 279.0,
+        "closed_dates": []
+      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -844,16 +854,6 @@
       {
         "room_id": "18",
         "name": "Double room 'Top-Floors'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-06"
-        ]
-      },
-      {
-        "room_id": "19",
-        "name": "Triple room 'Eiger & Balcony'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
