@@ -1,6 +1,6 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-24T05:14:54",
+    "checked_at": "2026-06-24T08:38:07",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -147,7 +147,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-24T05:14:57",
+    "checked_at": "2026-06-24T08:38:11",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -292,7 +292,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-24T05:15:01",
+    "checked_at": "2026-06-24T08:38:14",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -441,7 +441,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-24T05:15:05",
+    "checked_at": "2026-06-24T08:38:17",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -590,7 +590,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-24T05:15:09",
+    "checked_at": "2026-06-24T08:38:21",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -737,12 +737,20 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-24T05:15:13",
+    "checked_at": "2026-06-24T08:38:25",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
+      {
+        "room_id": "15",
+        "name": "Double room 'Basic+'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": true,
+        "price_chf": 117.0,
+        "closed_dates": []
+      },
       {
         "room_id": "19",
         "name": "Triple room 'Eiger & Balcony'",
@@ -784,16 +792,6 @@
       {
         "room_id": "13",
         "name": "Double room 'Basic'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": false,
-        "price_chf": null,
-        "closed_dates": [
-          "2026-07-06"
-        ]
-      },
-      {
-        "room_id": "15",
-        "name": "Double room 'Basic+'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
