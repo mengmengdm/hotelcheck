@@ -1,6 +1,6 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-06-28T19:20:45",
+    "checked_at": "2026-06-28T20:39:52",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -147,7 +147,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-06-28T19:20:49",
+    "checked_at": "2026-06-28T20:39:56",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -294,7 +294,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-06-28T19:20:53",
+    "checked_at": "2026-06-28T20:39:59",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -443,7 +443,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-06-28T19:20:58",
+    "checked_at": "2026-06-28T20:40:03",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -592,7 +592,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-06-28T19:21:02",
+    "checked_at": "2026-06-28T20:40:07",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -737,7 +737,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-06-28T19:21:05",
+    "checked_at": "2026-06-28T20:40:11",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
