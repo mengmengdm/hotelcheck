@@ -1,19 +1,11 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-07-01T08:07:17",
+    "checked_at": "2026-07-01T11:36:30",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "19",
-        "name": "Triple room 'Eiger & Balcony'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 225.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -125,6 +117,16 @@
         ]
       },
       {
+        "room_id": "19",
+        "name": "Triple room 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-01"
+        ]
+      },
+      {
         "room_id": "23",
         "name": "Apartment Arabelle",
         "occupation": "Occupation: 2 Adult(s)",
@@ -147,7 +149,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-07-01T08:07:21",
+    "checked_at": "2026-07-01T11:36:33",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -294,7 +296,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-07-01T08:07:25",
+    "checked_at": "2026-07-01T11:36:36",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -443,7 +445,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-07-01T08:07:28",
+    "checked_at": "2026-07-01T11:36:40",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -592,7 +594,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-07-01T08:07:31",
+    "checked_at": "2026-07-01T11:36:43",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -741,7 +743,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-07-01T08:07:35",
+    "checked_at": "2026-07-01T11:36:47",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
