@@ -1,19 +1,11 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-07-02T14:35:41",
+    "checked_at": "2026-07-02T16:44:48",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "18",
-        "name": "Double room 'Top-Floors'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 216.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -107,6 +99,16 @@
       {
         "room_id": "17",
         "name": "Double room 'Eiger & Balcony'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-02"
+        ]
+      },
+      {
+        "room_id": "18",
+        "name": "Double room 'Top-Floors'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -147,20 +149,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-07-02T14:35:45",
+    "checked_at": "2026-07-02T16:44:52",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "18",
-        "name": "Double room 'Top-Floors'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 216.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -262,6 +256,16 @@
         ]
       },
       {
+        "room_id": "18",
+        "name": "Double room 'Top-Floors'",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-02"
+        ]
+      },
+      {
         "room_id": "19",
         "name": "Triple room 'Eiger & Balcony'",
         "occupation": "Occupation: 2 Adult(s)",
@@ -294,7 +298,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-07-02T14:35:49",
+    "checked_at": "2026-07-02T16:44:55",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -443,7 +447,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-07-02T14:35:52",
+    "checked_at": "2026-07-02T16:44:59",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -592,7 +596,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-07-02T14:35:55",
+    "checked_at": "2026-07-02T16:45:02",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -741,7 +745,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-07-02T14:35:59",
+    "checked_at": "2026-07-02T16:45:06",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
