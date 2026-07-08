@@ -1,6 +1,6 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-07-08T07:43:30",
+    "checked_at": "2026-07-08T10:07:42",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
@@ -10,9 +10,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
@@ -147,7 +149,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-07-08T07:43:34",
+    "checked_at": "2026-07-08T10:07:46",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
@@ -157,9 +159,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
@@ -294,7 +298,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-07-08T07:43:38",
+    "checked_at": "2026-07-08T10:07:49",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
@@ -304,9 +308,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
@@ -441,7 +447,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-07-08T07:43:42",
+    "checked_at": "2026-07-08T10:07:53",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
@@ -451,9 +457,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
@@ -588,7 +596,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-07-08T07:43:45",
+    "checked_at": "2026-07-08T10:07:57",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
@@ -598,9 +606,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
@@ -735,7 +745,7 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-07-08T07:43:49",
+    "checked_at": "2026-07-08T10:08:00",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
@@ -745,9 +755,11 @@
         "room_id": "6",
         "name": "Double room 'Standard'",
         "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-08"
+        ]
       },
       {
         "room_id": "8",
