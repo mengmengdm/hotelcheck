@@ -1,19 +1,11 @@
 {
   "sub:owner-grindelwald-2026-07:2026-07-01_2026-07-02_a2r1": {
-    "checked_at": "2026-07-13T14:07:03",
+    "checked_at": "2026-07-13T16:44:53",
     "arrival": "2026-07-01",
     "departure": "2026-07-02",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -87,6 +79,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -147,20 +149,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-02_2026-07-03_a2r1": {
-    "checked_at": "2026-07-13T14:07:06",
+    "checked_at": "2026-07-13T16:44:56",
     "arrival": "2026-07-02",
     "departure": "2026-07-03",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -234,6 +228,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -294,20 +298,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-03_2026-07-04_a2r1": {
-    "checked_at": "2026-07-13T14:07:09",
+    "checked_at": "2026-07-13T16:45:00",
     "arrival": "2026-07-03",
     "departure": "2026-07-04",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -381,6 +377,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -441,20 +447,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-04_2026-07-05_a2r1": {
-    "checked_at": "2026-07-13T14:07:13",
+    "checked_at": "2026-07-13T16:45:04",
     "arrival": "2026-07-04",
     "departure": "2026-07-05",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -528,6 +526,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -588,20 +596,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-05_2026-07-06_a2r1": {
-    "checked_at": "2026-07-13T14:07:16",
+    "checked_at": "2026-07-13T16:45:08",
     "arrival": "2026-07-05",
     "departure": "2026-07-06",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -675,6 +675,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
@@ -735,20 +745,12 @@
     ]
   },
   "sub:owner-grindelwald-2026-07:2026-07-06_2026-07-07_a2r1": {
-    "checked_at": "2026-07-13T14:07:20",
+    "checked_at": "2026-07-13T16:45:12",
     "arrival": "2026-07-06",
     "departure": "2026-07-07",
     "adults": 2,
     "rooms_requested": 1,
     "rooms": [
-      {
-        "room_id": "16",
-        "name": "Double room 'Eiger'",
-        "occupation": "Occupation: 2 Adult(s)",
-        "available": true,
-        "price_chf": 171.0,
-        "closed_dates": []
-      },
       {
         "room_id": "6",
         "name": "Double room 'Standard'",
@@ -822,6 +824,16 @@
       {
         "room_id": "11",
         "name": "Family room",
+        "occupation": "Occupation: 2 Adult(s)",
+        "available": false,
+        "price_chf": null,
+        "closed_dates": [
+          "2026-07-13"
+        ]
+      },
+      {
+        "room_id": "16",
+        "name": "Double room 'Eiger'",
         "occupation": "Occupation: 2 Adult(s)",
         "available": false,
         "price_chf": null,
